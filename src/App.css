@@ -1,0 +1,137 @@
+.home-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #3b82f6; /* blue */
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-logo {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.navbar-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.navbar-link:hover {
+  color: #93c5fd; /* lighter blue on hover */
+}
+
+.navbar-getstarted {
+  background-color: #2563eb; /* blue-600 */
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.navbar-getstarted:hover {
+  background-color: #1d4ed8; /* darker blue on hover */
+}
+
+
+
+/* Home */
+.home-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+  color: white;
+
+  background-image: url('https://images.pexels.com/photos/16995901/pexels-photo-16995901.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  position: relative;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  box-sizing: border-box;
+}
+
+/* Dark overlay for better text readability */
+.home-container::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 0;
+}
+
+/* Content above overlay */
+.home-container > * {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;   /* limits width so text doesn’t get too wide */
+  margin: 0 auto;     /* center content horizontally */
+}
+
+.home-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: white;
+  word-wrap: break-word;
+}
+
+/* Responsive font size for smaller screens */
+@media (max-width: 640px) {
+  .home-title {
+    font-size: 1.8rem;
+  }
+}
+
+.home-subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  color: white;
+  word-wrap: break-word;
+}
+
+/* Responsive subtitle font size */
+@media (max-width: 640px) {
+  .home-subtitle {
+    font-size: 1rem;
+  }
+}
+
+.home-button {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.home-button:hover {
+  background-color: #1d4ed8;
+}
