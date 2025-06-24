@@ -6,6 +6,7 @@ import  './App.css'
 import ParkingSpots from './Pages/ParkingSpots';
 import 'leaflet/dist/leaflet.css';
 
+
 const App = () => (
   <Router>
     <Navbar />
