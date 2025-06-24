@@ -1,5 +1,17 @@
-// src/Pages/BookParking.jsx
 import React, { useState } from 'react';
+
+const paymentOptions = [
+  {
+    name: 'Visa',
+    value: 'Visa',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png',
+  },
+  {
+    name: 'MasterCard',
+    value: 'MasterCard',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg',
+  },
+];
 
 const BookParking = () => {
   const [formData, setFormData] = useState({
@@ -8,25 +20,28 @@ const BookParking = () => {
     date: '',
     time: '',
     slot: '',
+    paymentMethod: '',
   });
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Parking booked for ${formData.name} - Slot: ${formData.slot}`);
-    // Reset form
+    alert(
+      `Parking booked for ${formData.name} - Slot: ${formData.slot} - Payment Method: ${formData.paymentMethod}`
+    );
     setFormData({
       name: '',
       carNumber: '',
       date: '',
       time: '',
       slot: '',
+      paymentMethod: '',
     });
   };
 
@@ -74,10 +89,31 @@ const BookParking = () => {
     borderRadius: '8px',
     fontSize: '16px',
     cursor: 'pointer',
+    transition: 'background-color 0.3s ease',
   };
 
-  const selectStyle = {
-    ...inputStyle,
+  const radioContainerStyle = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '20px',
+  };
+
+  const radioLabelStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
+    fontSize: '16px',
+    color: '#333',
+    gap: '8px',
+  };
+
+  const radioInputStyle = {
+    cursor: 'pointer',
+  };
+
+  const paymentLogoStyle = {
+    width: '40px',
+    height: 'auto',
   };
 
   return (
@@ -123,7 +159,7 @@ const BookParking = () => {
             name="slot"
             value={formData.slot}
             onChange={handleChange}
-            style={selectStyle}
+            style={inputStyle}
             required
           >
             <option value="">Select a Slot</option>
@@ -133,7 +169,34 @@ const BookParking = () => {
             <option value="Slot D">Slot D</option>
           </select>
 
-          <button type="submit" style={buttonStyle}>
+          {/* Payment Method radios with logos */}
+          <div style={{ marginBottom: '10px', fontWeight: '600', color: '#444' }}>
+            Select Payment Method:
+          </div>
+          <div style={radioContainerStyle}>
+            {paymentOptions.map(({ name, value, img }) => (
+              <label key={value} style={radioLabelStyle}>
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value={value}
+                  checked={formData.paymentMethod === value}
+                  onChange={handleChange}
+                  style={radioInputStyle}
+                  required
+                />
+                <img src={img} alt={name} style={paymentLogoStyle} />
+                {name}
+              </label>
+            ))}
+          </div>
+
+          <button
+            type="submit"
+            style={buttonStyle}
+            onMouseOver={(e) => (e.target.style.backgroundColor = '#1e40af')}
+            onMouseOut={(e) => (e.target.style.backgroundColor = '#2563eb')}
+          >
             Book Now
           </button>
         </form>
