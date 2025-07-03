@@ -78,15 +78,15 @@ const Home = () => {
         </p>
         <div style={featuresStyle}>
           <div style={featureBoxStyle}>
-            <h3>🅿️ Easy Booking</h3>
+            <h3> Easy Booking</h3>
             <p>Reserve your parking spot in just a few clicks.</p>
           </div>
           <div style={featureBoxStyle}>
-            <h3>📍 Real-Time Location</h3>
+            <h3>Real-Time Location</h3>
             <p>See what's available near you instantly.</p>
           </div>
           <div style={featureBoxStyle}>
-            <h3>🔒 Secure & Reliable</h3>
+            <h3> Secure & Reliable</h3>
             <p>Your data and vehicles are safe with us.</p>
           </div>
         </div>

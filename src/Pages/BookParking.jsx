@@ -1,4 +1,6 @@
+// src/Pages/BookParking.jsx
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const paymentOptions = [
   {
@@ -14,12 +16,14 @@ const paymentOptions = [
 ];
 
 const BookParking = () => {
+  const { spotId } = useParams();
+
   const [formData, setFormData] = useState({
     name: '',
     carNumber: '',
     date: '',
     time: '',
-    slot: '',
+    slot: decodeURIComponent(spotId || ''),
     paymentMethod: '',
   });
 
@@ -33,7 +37,7 @@ const BookParking = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     alert(
-      `Parking booked for ${formData.name} - Slot: ${formData.slot} - Payment Method: ${formData.paymentMethod}`
+      `✅ Parking booked for ${formData.name} - Slot: ${formData.slot} - Payment: ${formData.paymentMethod}`
     );
     setFormData({
       name: '',
@@ -45,164 +49,61 @@ const BookParking = () => {
     });
   };
 
-  const containerStyle = {
-    minHeight: '100vh',
-    backgroundColor: '#f3f4f6',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: '30px',
-  };
-
-  const cardStyle = {
-    backgroundColor: 'white',
-    padding: '40px',
-    borderRadius: '16px',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-    width: '100%',
-    maxWidth: '500px',
-  };
-
-  const headingStyle = {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    marginBottom: '20px',
-    textAlign: 'center',
-    color: '#1f2937',
-  };
-
-  const inputStyle = {
-    width: '100%',
-    padding: '12px',
-    marginBottom: '15px',
-    border: '1px solid #ccc',
-    borderRadius: '8px',
-    fontSize: '16px',
-  };
-
-  const buttonStyle = {
-    width: '100%',
-    padding: '12px',
-    backgroundColor: '#2563eb',
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '16px',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s ease',
-  };
-
-  const radioContainerStyle = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginBottom: '20px',
-  };
-
-  const radioLabelStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    cursor: 'pointer',
-    fontSize: '16px',
-    color: '#333',
-    gap: '8px',
-  };
-
-  const radioInputStyle = {
-    cursor: 'pointer',
-  };
-
-  const paymentLogoStyle = {
-    width: '40px',
-    height: 'auto',
-  };
-
   return (
-    <div style={containerStyle}>
-      <div style={cardStyle}>
-        <h2 style={headingStyle}>Book Your Parking Spot</h2>
+    <div style={{ minHeight: '100vh', backgroundColor: '#f3f4f6', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '30px' }}>
+      <div style={{ backgroundColor: 'white', padding: '40px', borderRadius: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', maxWidth: '500px', width: '100%' }}>
+        <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px', textAlign: 'center' }}>Book Your Parking Spot</h2>
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Your Name"
-            value={formData.name}
-            onChange={handleChange}
-            style={inputStyle}
-            required
-          />
-          <input
-            type="text"
-            name="carNumber"
-            placeholder="Car Number (e.g. ZIM1234)"
-            value={formData.carNumber}
-            onChange={handleChange}
-            style={inputStyle}
-            required
-          />
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            style={inputStyle}
-            required
-          />
-          <input
-            type="time"
-            name="time"
-            value={formData.time}
-            onChange={handleChange}
-            style={inputStyle}
-            required
-          />
-          <select
-            name="slot"
-            value={formData.slot}
-            onChange={handleChange}
-            style={inputStyle}
-            required
-          >
-            <option value="">Select a Slot</option>
-            <option value="Slot A">Slot A</option>
-            <option value="Slot B">Slot B</option>
-            <option value="Slot C">Slot C</option>
-            <option value="Slot D">Slot D</option>
-          </select>
+          <input type="text" name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} required style={inputStyle} />
+          <input type="text" name="carNumber" placeholder="Car Number (e.g. ZIM1234)" value={formData.carNumber} onChange={handleChange} required style={inputStyle} />
+          <input type="date" name="date" value={formData.date} onChange={handleChange} required style={inputStyle} />
+          <input type="time" name="time" value={formData.time} onChange={handleChange} required style={inputStyle} />
+          <input type="text" name="slot" value={formData.slot} readOnly style={{ ...inputStyle, backgroundColor: '#e5e7eb' }} />
 
-          {/* Payment Method radios with logos */}
-          <div style={{ marginBottom: '10px', fontWeight: '600', color: '#444' }}>
-            Select Payment Method:
-          </div>
-          <div style={radioContainerStyle}>
+          <div style={{ marginBottom: '10px', fontWeight: '600', color: '#444' }}>Select Payment Method:</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
             {paymentOptions.map(({ name, value, img }) => (
-              <label key={value} style={radioLabelStyle}>
+              <label key={value} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', fontSize: '16px', color: '#333', gap: '8px' }}>
                 <input
                   type="radio"
                   name="paymentMethod"
                   value={value}
                   checked={formData.paymentMethod === value}
                   onChange={handleChange}
-                  style={radioInputStyle}
                   required
+                  style={{ cursor: 'pointer' }}
                 />
-                <img src={img} alt={name} style={paymentLogoStyle} />
+                <img src={img} alt={name} style={{ width: '40px', height: 'auto' }} />
                 {name}
               </label>
             ))}
           </div>
 
-          <button
-            type="submit"
-            style={buttonStyle}
-            onMouseOver={(e) => (e.target.style.backgroundColor = '#1e40af')}
-            onMouseOut={(e) => (e.target.style.backgroundColor = '#2563eb')}
-          >
-            Book Now
-          </button>
+          <button type="submit" style={buttonStyle}>Book Now</button>
         </form>
       </div>
     </div>
   );
+};
+
+const inputStyle = {
+  width: '100%',
+  padding: '12px',
+  marginBottom: '15px',
+  border: '1px solid #ccc',
+  borderRadius: '8px',
+  fontSize: '16px',
+};
+
+const buttonStyle = {
+  width: '100%',
+  padding: '12px',
+  backgroundColor: '#2563eb',
+  color: 'white',
+  border: 'none',
+  borderRadius: '8px',
+  fontSize: '16px',
+  cursor: 'pointer',
 };
 
 export default BookParking;

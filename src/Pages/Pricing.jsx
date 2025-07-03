@@ -1,17 +1,10 @@
 import React from 'react';
 
-const pricingData = [
-  { zone: 'On‑Street (Casual, Hourly)', rate: 'USD 1 or ZWG 26.36 per hour' },
-  { zone: 'Parkade Reserved (Monthly)', rate: 'USD 90' },
-  { zone: 'Parkade Unreserved (Monthly)', rate: 'USD 70' },
-  { zone: 'Fourth Street Lot (Monthly)', rate: 'USD 60' },
-];
-
-const Pricing = () => {
+const HowPricingWorks = () => {
   return (
     <div
       style={{
-        backgroundColor: '#fff',  // white background
+        backgroundColor: '#f9fafb',
         minHeight: '100vh',
         display: 'flex',
         justifyContent: 'center',
@@ -22,88 +15,123 @@ const Pricing = () => {
     >
       <div
         style={{
-          maxWidth: '700px',
+          maxWidth: '900px',
           width: '100%',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.1)',
-          borderRadius: '14px',
-          border: '1px solid #e0e0e0',
-          padding: '2.5rem',
-          backgroundColor: '#fafafa',
+          display: 'flex',
+          flexWrap: 'wrap',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.12)',
+          borderRadius: '16px',
+          backgroundColor: '#ffffff',
+          overflow: 'hidden',
+          animation: 'fadeIn 1s ease forwards',
         }}
       >
-        <h1
+        {/* Left image side */}
+        <div style={{ flex: '1 1 350px', minWidth: 300, position: 'relative' }}>
+          <img
+            src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80"
+            alt="Negotiation discussion"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              borderRadius: '16px 0 0 16px',
+              display: 'block',
+            }}
+          />
+        </div>
+
+        {/* Right content side */}
+        <div
           style={{
-            textAlign: 'center',
-            fontSize: '2.4rem',
-            color: '#222',
-            marginBottom: '2rem',
-            fontWeight: '700',
+            flex: '1 1 500px',
+            padding: '3rem 3rem 3rem 2rem',
+            color: '#1f2937',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
           }}
         >
-          Harare City Parking – Pricing Guide
-        </h1>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr>
-              <th
-                style={{
-                  padding: '1rem 1.2rem',
-                  fontSize: '1.2rem',
-                  borderBottom: '3px solid #1976d2',
-                  color: '#1976d2',
-                  textAlign: 'left',
-                  fontWeight: '600',
-                }}
-              >
-                Parking Zone
-              </th>
-              <th
-                style={{
-                  padding: '1rem 1.2rem',
-                  fontSize: '1.2rem',
-                  borderBottom: '3px solid #1976d2',
-                  color: '#1976d2',
-                  textAlign: 'left',
-                  fontWeight: '600',
-                }}
-              >
-                Rate
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {pricingData.map(({ zone, rate }, i) => (
-              <tr
+          <h1
+            style={{
+              fontSize: '2.8rem',
+              color: '#2563eb',
+              marginBottom: '1rem',
+              fontWeight: '700',
+            }}
+          >
+            How Pricing and Negotiation Work
+          </h1>
+
+          <p style={{ fontSize: '1.2rem', marginBottom: '1.5rem', lineHeight: '1.6' }}>
+            In this app, <strong>agents</strong> set the initial parking prices based on zones and availability.
+            Drivers have the opportunity to <strong>negotiate directly</strong> with agents to propose their own price.
+          </p>
+
+          <ul style={{ listStyle: 'none', paddingLeft: 0, marginBottom: '2rem' }}>
+            {[
+              'Agents post their standard rates for parking zones.',
+              'Drivers can propose a price they are willing to pay.',
+              'Agents review and accept, reject, or counteroffer.',
+              'Once agreed, booking confirms at the negotiated price.',
+            ].map((item, i) => (
+              <li
                 key={i}
                 style={{
-                  backgroundColor: i % 2 === 0 ? '#fff' : '#f5f8fa',
+                  marginBottom: '1rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  fontSize: '1.1rem',
+                  gap: '0.8rem',
+                  color: '#374151',
                 }}
               >
-                <td
-                  style={{
-                    padding: '1rem 1.2rem',
-                    fontSize: '1rem',
-                    color: '#333',
-                  }}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="#2563eb"
+                  style={{ width: 24, height: 24, flexShrink: 0 }}
                 >
-                  {zone}
-                </td>
-                <td
-                  style={{
-                    padding: '1rem 1.2rem',
-                    fontSize: '1rem',
-                    color: '#333',
-                  }}
-                >
-                  {rate}
-                </td>
-              </tr>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                {item}
+              </li>
             ))}
-          </tbody>
-        </table>
+          </ul>
+
+          <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: '#4b5563' }}>
+            This negotiation model encourages transparency and gives drivers flexibility, while allowing agents to
+            manage demand effectively and optimize parking availability.
+          </p>
+        </div>
       </div>
+
+      {/* CSS Animation */}
+      <style>
+        {`
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+
+          @media (max-width: 768px) {
+            div[style*="flex-wrap: wrap"] {
+              flex-direction: column;
+              border-radius: 16px;
+            }
+            div[style*="flex: 1 1 350px"] {
+              border-radius: 16px 16px 0 0;
+            }
+            div[style*="flex: 1 1 500px"] {
+              padding: 2rem 1.5rem 3rem 1.5rem !important;
+            }
+          }
+        `}
+      </style>
     </div>
   );
 };
 
-export default Pricing;
+export default HowPricingWorks;
