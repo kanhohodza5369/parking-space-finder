@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Icon } from '@iconify/react';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -8,100 +9,174 @@ const Home = () => {
     navigate('/login');
   };
 
-  // Inline styles for body section
-  const bodyStyle = {
-    backgroundColor: '#ffffff',
-    padding: '60px 40px',
-    textAlign: 'center',
-  };
-
-  const sectionTitleStyle = {
-    fontSize: '2rem',
-    color: '#1e293b',
-    marginBottom: '20px',
-    fontWeight: '700',
-  };
-
-  const sectionSubtitleStyle = {
-    fontSize: '1rem',
-    color: '#475569',
-    marginBottom: '40px',
-    maxWidth: '600px',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    lineHeight: '1.6',
-  };
-
-  const featuresStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '20px',
-    justifyContent: 'center',
-    alignItems: 'center',
-  };
-
-  const featureBoxStyle = {
-    backgroundColor: '#f8fafc',
-    border: '1px solid #e2e8f0',
-    padding: '20px',
-    borderRadius: '12px',
-    width: '250px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-  };
-
-  // Inline styles for footer
-  const footerStyle = {
-    backgroundColor: '#1e293b',
-    color: 'white',
-    textAlign: 'center',
-    padding: '30px 40px',
-    fontSize: '14px',
-    marginTop: '60px',
-  };
-
   return (
-    <div className="home-wrapper">
+    <div style={{ fontFamily: "'Inter', sans-serif", color: '#1e293b', backgroundColor: '#f9fafb', minHeight: '100vh' }}>
       {/* Hero Section */}
-      <div className="home-container" style={{ marginBottom: '40px' }}>
-        <h1 className="home-title">Welcome to City Parking</h1>
-        <p className="home-subtitle">Find parking spots easily in your city.</p>
-        <button className="home-button" onClick={handleGetStarted}>
-          Get Started
-        </button>
-      </div>
-
-      {/* Body Section */}
-      <div style={bodyStyle}>
-        <h2 style={sectionTitleStyle}>Why Choose Us?</h2>
-        <p style={sectionSubtitleStyle}>
-          We make parking simple and stress-free. View available slots, book online, and save your time.
+      <section
+        style={{
+          background: 'linear-gradient(135deg, #3b82f6 0%, #10b981 100%)',
+          color: 'white',
+          padding: '100px 20px 80px',
+          textAlign: 'center',
+          borderBottomLeftRadius: '60px',
+          borderBottomRightRadius: '60px',
+          boxShadow: '0 8px 24px rgba(16, 185, 129, 0.3)',
+        }}
+      >
+        <h1
+          style={{
+            fontWeight: '900',
+            fontSize: '3.75rem',
+            lineHeight: 1.1,
+            maxWidth: 650,
+            margin: '0 auto 24px',
+            letterSpacing: '-0.03em',
+          }}
+        >
+          Welcome to Easy Parking
+        </h1>
+        <p
+          style={{
+            fontSize: '1.375rem',
+            fontWeight: '500',
+            maxWidth: 480,
+            margin: '0 auto 48px',
+            opacity: 0.9,
+            lineHeight: 1.6,
+          }}
+        >
+          Find parking spots easily in your city. Save time and avoid stress with our real-time availability and easy booking system.
         </p>
-        <div style={featuresStyle}>
-          <div style={featureBoxStyle}>
-            <h3> Easy Booking</h3>
-            <p>Reserve your parking spot in just a few clicks.</p>
+        <button
+          onClick={handleGetStarted}
+          style={{
+            backgroundColor: '#ffffff',
+            color: '#10b981',
+            fontWeight: '700',
+            fontSize: '1.125rem',
+            padding: '16px 56px',
+            borderRadius: '40px',
+            border: 'none',
+            cursor: 'pointer',
+            boxShadow: '0 10px 25px rgba(16, 185, 129, 0.4)',
+            transition: 'all 0.3s ease',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '12px',
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.backgroundColor = '#0f766e';
+            e.currentTarget.style.color = 'white';
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.backgroundColor = '#ffffff';
+            e.currentTarget.style.color = '#10b981';
+          }}
+        >
+          Get Started
+          <Icon icon="mdi:arrow-right-bold" style={{ fontSize: '24px' }} />
+        </button>
+      </section>
+
+      {/* Features Section */}
+      <section
+        style={{
+          padding: '80px 20px',
+          maxWidth: 1200,
+          margin: '0 auto',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '40px',
+        }}
+      >
+        {[
+          {
+            icon: 'mdi:car-arrow-right',
+            title: 'Easy Booking',
+            description: 'Reserve your parking spot in just a few clicks.',
+          },
+          {
+            icon: 'mdi:map-marker-radius',
+            title: 'Real-Time Location',
+            description: "See what's available near you instantly.",
+          },
+          {
+            icon: 'mdi:shield-check',
+            title: 'Secure & Reliable',
+            description: 'Your data and vehicles are safe with us.',
+          },
+        ].map(({ icon, title, description }, idx) => (
+          <div
+            key={idx}
+            style={{
+              backgroundColor: 'white',
+              borderRadius: '24px',
+              padding: '40px 32px',
+              boxShadow: '0 12px 36px rgba(0,0,0,0.08)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              transition: 'transform 0.3s ease',
+              cursor: 'default',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.transform = 'translateY(-12px)';
+              e.currentTarget.style.boxShadow = '0 20px 48px rgba(0,0,0,0.12)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 12px 36px rgba(0,0,0,0.08)';
+            }}
+          >
+            <Icon icon={icon} style={{ fontSize: '48px', color: '#10b981', marginBottom: '24px' }} />
+            <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '16px', color: '#1e293b' }}>
+              {title}
+            </h3>
+            <p style={{ fontSize: '1rem', color: '#475569', lineHeight: 1.6 }}>{description}</p>
           </div>
-          <div style={featureBoxStyle}>
-            <h3>Real-Time Location</h3>
-            <p>See what's available near you instantly.</p>
-          </div>
-          <div style={featureBoxStyle}>
-            <h3> Secure & Reliable</h3>
-            <p>Your data and vehicles are safe with us.</p>
-          </div>
-        </div>
-      </div>
+        ))}
+      </section>
 
       {/* Contact Section */}
-      <div className="contact-section" style={{ textAlign: 'center', padding: '40px 20px', backgroundColor: '#f9fafb' }}>
-        <h2 style={{ fontSize: '1.75rem', color: '#1e293b', marginBottom: '10px' }}>Contact Us</h2>
-        <p style={{ color: '#475569', fontSize: '1rem', margin: '5px 0' }}>Email: support@cityparking.com</p>
-        <p style={{ color: '#475569', fontSize: '1rem', margin: '5px 0' }}>Phone: +263 77 123 4567</p>
-        <p style={{ color: '#475569', fontSize: '1rem', margin: '5px 0' }}>Location: Harare, Zimbabwe</p>
-      </div>
+      <section
+        style={{
+          backgroundColor: 'white',
+          padding: '60px 20px',
+          maxWidth: 800,
+          margin: '0 auto 80px',
+          borderRadius: '24px',
+          boxShadow: '0 12px 36px rgba(0,0,0,0.08)',
+          textAlign: 'center',
+        }}
+      >
+        <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '24px', color: '#1e293b' }}>
+          Contact Us
+        </h2>
+        <p style={{ fontSize: '1.125rem', color: '#475569', marginBottom: '12px' }}>
+          <strong>Email:</strong> support@cityparking.com
+        </p>
+        <p style={{ fontSize: '1.125rem', color: '#475569', marginBottom: '12px' }}>
+          <strong>Phone:</strong> +263 77 123 4567
+        </p>
+        <p style={{ fontSize: '1.125rem', color: '#475569' }}>
+          <strong>Location:</strong> Harare, Zimbabwe
+        </p>
+      </section>
 
       {/* Footer */}
-      <footer style={footerStyle}>
+      <footer
+        style={{
+          backgroundColor: '#1e293b',
+          color: 'white',
+          textAlign: 'center',
+          padding: '24px 20px',
+          fontSize: '14px',
+          letterSpacing: '0.05em',
+          fontWeight: '500',
+          userSelect: 'none',
+        }}
+      >
         <p>© {new Date().getFullYear()} City Parking. All rights reserved.</p>
       </footer>
     </div>

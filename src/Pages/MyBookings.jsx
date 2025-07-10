@@ -1,5 +1,11 @@
 // src/Pages/MyBookings.jsx
 import React, { useState } from 'react';
+import { Icon } from '@iconify/react';
+import calendarClock from '@iconify/icons-mdi/calendar-clock';
+import carInfo from '@iconify/icons-mdi/car-info';
+import mapMarker from '@iconify/icons-mdi/map-marker';
+import creditCardOutline from '@iconify/icons-mdi/credit-card-outline';
+import accountIcon from '@iconify/icons-mdi/account';
 
 const mockBookings = [
   {
@@ -23,13 +29,7 @@ const mockBookings = [
 ];
 
 const MyBookings = () => {
-  const [bookings, setBookings] = useState(mockBookings);
-
-  const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this booking?')) {
-      setBookings(bookings.filter(b => b.id !== id));
-    }
-  };
+  const [bookings] = useState(mockBookings);
 
   return (
     <div style={styles.container}>
@@ -40,13 +40,14 @@ const MyBookings = () => {
         <div style={styles.list}>
           {bookings.map((booking) => (
             <div key={booking.id} style={styles.card}>
-              <h3 style={styles.title}>{booking.slot}</h3>
-              <p><strong>Name:</strong> {booking.name}</p>
-              <p><strong>Car #:</strong> {booking.carNumber}</p>
-              <p><strong>Date:</strong> {booking.date}</p>
-              <p><strong>Time:</strong> {booking.time}</p>
-              <p><strong>Payment:</strong> {booking.paymentMethod}</p>
-              <button style={styles.deleteBtn} onClick={() => handleDelete(booking.id)}>Delete</button>
+              <h3 style={styles.title}>
+                <Icon icon={mapMarker} style={styles.icon} />
+                {booking.slot}
+              </h3>
+              <p><Icon icon={accountIcon} style={styles.icon} /> {booking.name}</p>
+              <p><Icon icon={carInfo} style={styles.icon} /> {booking.carNumber}</p>
+              <p><Icon icon={calendarClock} style={styles.icon} /> {booking.date} — {booking.time}</p>
+              <p><Icon icon={creditCardOutline} style={styles.icon} /> {booking.paymentMethod}</p>
             </div>
           ))}
         </div>
@@ -60,6 +61,7 @@ const styles = {
     padding: '40px',
     backgroundColor: '#f9fafb',
     minHeight: '100vh',
+    fontFamily: 'Arial, sans-serif',
   },
   heading: {
     fontSize: '28px',
@@ -84,15 +86,15 @@ const styles = {
     fontWeight: '600',
     marginBottom: '10px',
     color: '#1d4ed8',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
   },
-  deleteBtn: {
-    marginTop: '10px',
-    padding: '8px 12px',
-    backgroundColor: '#dc2626',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '6px',
-    cursor: 'pointer',
+  icon: {
+    marginRight: '8px',
+    verticalAlign: 'middle',
+    fontSize: '20px',
+    color: '#374151',
   },
 };
 

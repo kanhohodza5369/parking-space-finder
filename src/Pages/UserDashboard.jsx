@@ -1,224 +1,190 @@
-import React, { useState } from 'react';
-import { FaSignOutAlt, FaCarAlt, FaHistory, FaClock, FaArrowLeft } from 'react-icons/fa';
+// src/Pages/UserDashboard.jsx
+import React, { useEffect, useState } from 'react';
+import { Icon } from '@iconify/react';
 import ParkingSpots from './ParkingSpots';
-import MyBookings from './MyBookings'; // Import MyBookings
+import MyBookings from './MyBookings';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
 
-const mockActivity = [
-  { id: 1, message: "Booked parking at Harare CBD Zone A", time: "10 minutes ago" },
-  { id: 2, message: "Searched for parking near Avondale", time: "2 hours ago" },
-  { id: 3, message: "Viewed history of past bookings", time: "Yesterday" },
+// Full list of Harare areas
+const initialAvailability = [
+  { location: 'CBD Zone A', available: 75 },
+  { location: 'Avondale', available: 62 },
+  { location: 'Eastlea', available: 50 },
+  { location: 'Borrowdale', available: 80 },
+  { location: 'Greencroft', available: 40 },
+  { location: 'Highlands', available: 55 },
+  { location: 'Mabelreign', available: 60 },
+  { location: 'Westgate', available: 73 },
+  { location: 'Mount Pleasant', available: 58 },
+  { location: 'Msasa', available: 42 },
+  { location: 'Belgravia', available: 66 },
+  { location: 'Warren Park', available: 38 },
 ];
 
 const UserDashboard = ({ onLogout, user = { name: "Driver" } }) => {
-  const [logoutHover, setLogoutHover] = useState(false);
-  const [showMap, setShowMap] = useState(false);
-  const [showBookings, setShowBookings] = useState(false);
+  const [view, setView] = useState('dashboard');
+  const [availabilityData, setAvailabilityData] = useState(initialAvailability);
+
+  // Simulate live updates every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const updated = availabilityData.map(loc => ({
+        ...loc,
+        available: Math.max(0, Math.min(100, loc.available + (Math.random() * 20 - 10))),
+      }));
+      setAvailabilityData(updated);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [availabilityData]);
 
   const styles = {
-    page: {
+    layout: {
+      display: 'flex',
       minHeight: '100vh',
-      backgroundColor: '#f3f4f6',
-      padding: '20px',
-      fontFamily: 'Arial, sans-serif',
+      fontFamily: 'Inter, sans-serif',
+      backgroundColor: '#f9fafb',
+      color: '#0f172a',
     },
-    container: {
-      maxWidth: '1000px',
-      margin: '0 auto',
-      backgroundColor: '#fff',
-      borderRadius: '15px',
-      boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-      padding: '30px',
-    },
-    header: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: '30px',
-    },
-    title: {
-      fontSize: '24px',
-      fontWeight: 'bold',
-      color: '#111827',
-    },
-    logoutButton: {
-      display: 'flex',
-      alignItems: 'center',
-      backgroundColor: logoutHover ? '#c53030' : '#ef4444',
+    sidebar: {
+      width: '250px',
+      backgroundColor: '#1e293b',
       color: '#fff',
-      padding: '10px 16px',
-      border: 'none',
-      borderRadius: '8px',
-      cursor: 'pointer',
-      transition: 'background 0.3s ease',
-    },
-    cardsGrid: {
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
-      gap: '20px',
-      marginBottom: '30px',
-    },
-    card: {
-      display: 'flex',
-      alignItems: 'center',
-      backgroundColor: '#e0f2fe',
-      padding: '20px',
-      borderRadius: '12px',
-      color: '#1e40af',
-      boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
-      cursor: 'pointer',
-      userSelect: 'none',
-    },
-    greenCard: {
-      backgroundColor: '#dcfce7',
-      color: '#166534',
-    },
-    cardIcon: {
-      fontSize: '24px',
-      marginRight: '15px',
-    },
-    cardContent: {
       display: 'flex',
       flexDirection: 'column',
+      padding: '2rem 1.2rem',
+      gap: '1rem',
     },
-    cardTitle: {
-      fontWeight: 'bold',
-      fontSize: '18px',
-      marginBottom: '4px',
-    },
-    cardText: {
-      fontSize: '14px',
-    },
-    activitySection: {
-      backgroundColor: '#f9fafb',
-      padding: '20px',
-      borderRadius: '12px',
-      boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
-    },
-    activityTitle: {
-      fontSize: '20px',
-      fontWeight: '600',
-      marginBottom: '15px',
-      color: '#111827',
-    },
-    activityItem: {
-      display: 'flex',
-      alignItems: 'flex-start',
-      marginBottom: '10px',
-      color: '#374151',
-    },
-    activityIcon: {
-      marginRight: '10px',
-      marginTop: '4px',
-      color: '#6b7280',
-    },
-    activityText: {
-      fontSize: '14px',
-      marginBottom: '2px',
-    },
-    activityTime: {
-      fontSize: '12px',
-      color: '#9ca3af',
-    },
-    backButton: {
+    sidebarItem: {
+      padding: '14px 20px',
+      borderRadius: '10px',
       display: 'flex',
       alignItems: 'center',
-      backgroundColor: '#2563eb',
-      color: '#fff',
-      padding: '8px 14px',
-      border: 'none',
-      borderRadius: '8px',
-      cursor: 'pointer',
-      marginBottom: '20px',
-      fontWeight: '600',
+      gap: '12px',
       fontSize: '16px',
+      fontWeight: '500',
+      cursor: 'pointer',
     },
-    backIcon: {
-      marginRight: '8px',
+    sidebarItemActive: {
+      backgroundColor: '#3b82f6',
+      color: '#fff',
+    },
+    mainContent: {
+      flex: 1,
+      padding: '40px',
+    },
+    header: {
+      fontSize: '26px',
+      fontWeight: '700',
+      marginBottom: '32px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '10px',
+    },
+    chartCard: {
+      backgroundColor: '#ffffff',
+      borderRadius: '12px',
+      padding: '24px',
+      boxShadow: '0 1px 8px rgba(0,0,0,0.06)',
+    },
+    chartTitle: {
+      fontSize: '18px',
+      fontWeight: '600',
+      marginBottom: '16px',
     },
   };
 
-  // Back button handler resets views
-  const handleBack = () => {
-    setShowMap(false);
-    setShowBookings(false);
-  };
+  const sidebarItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: 'mdi:view-dashboard-outline', onClick: () => setView('dashboard') },
+    { id: 'map', label: 'Find Parking', icon: 'mdi:car-search', onClick: () => setView('map') },
+    { id: 'bookings', label: 'My Bookings', icon: 'mdi:calendar-check', onClick: () => setView('bookings') },
+    { id: 'logout', label: 'Log Out', icon: 'mdi:logout', onClick: onLogout },
+  ];
 
-  if (showMap) {
-    return (
-      <div style={styles.page}>
-        <div style={styles.container}>
-          <button style={styles.backButton} onClick={handleBack}>
-            <FaArrowLeft style={styles.backIcon} /> Back to Dashboard
-          </button>
-          <ParkingSpots isAgent={false} />
-        </div>
+  const renderDashboard = () => (
+    <>
+      <div style={styles.header}>
+        <Icon icon="mdi:account-circle-outline" style={{ fontSize: '32px' }} />
+        Welcome back, {user.name}
       </div>
-    );
-  }
 
-  if (showBookings) {
-    return (
-      <div style={styles.page}>
-        <div style={styles.container}>
-          <button style={styles.backButton} onClick={handleBack}>
-            <FaArrowLeft style={styles.backIcon} /> Back to Dashboard
-          </button>
-          <MyBookings />
-        </div>
+      <div style={styles.chartCard}>
+        <h3 style={styles.chartTitle}>📊 Live Parking Availability by Location</h3>
+        <ResponsiveContainer width="100%" height={360}>
+          <BarChart
+            data={availabilityData}
+            margin={{ top: 20, right: 30, left: 0, bottom: 60 }}
+          >
+            <defs>
+              <linearGradient id="availabilityGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#10b981" stopOpacity={0.9} />
+                <stop offset="100%" stopColor="#34d399" stopOpacity={0.5} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+            <XAxis
+              dataKey="location"
+              angle={-35}
+              textAnchor="end"
+              interval={0}
+              height={80}
+              tick={{ fontSize: 12, fill: "#64748b" }}
+            />
+            <YAxis domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
+            <Tooltip formatter={(value) => `${Math.round(value)}% Available`} />
+            <Bar
+              dataKey="available"
+              fill="url(#availabilityGradient)"
+              radius={[10, 10, 0, 0]}
+              animationDuration={1000}
+            />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
-    );
-  }
+    </>
+  );
 
   return (
-    <div style={styles.page}>
-      <div style={styles.container}>
-        {/* Header */}
-        <div style={styles.header}>
-          <h1 style={styles.title}>Welcome, {user.name} 🚗</h1>
-          <button
-            onClick={onLogout}
-            style={styles.logoutButton}
-            onMouseEnter={() => setLogoutHover(true)}
-            onMouseLeave={() => setLogoutHover(false)}
+    <div style={styles.layout}>
+      <aside style={styles.sidebar}>
+        {sidebarItems.map(item => (
+          <div
+            key={item.id}
+            style={{
+              ...styles.sidebarItem,
+              ...(view === item.id ? styles.sidebarItemActive : {}),
+            }}
+            onClick={item.onClick}
           >
-            <FaSignOutAlt style={{ marginRight: '8px' }} />
-            Log Out
+            <Icon icon={item.icon} />
+            {item.label}
+          </div>
+        ))}
+      </aside>
+
+      <main style={styles.mainContent}>
+        {view === 'dashboard' && renderDashboard()}
+        {view === 'map' && <>
+          <button onClick={() => setView('dashboard')} style={{ marginBottom: '20px' }}>
+            <Icon icon="mdi:arrow-left" /> Back
           </button>
-        </div>
-
-        {/* Action Cards */}
-        <div style={styles.cardsGrid}>
-          <div style={styles.card} onClick={() => setShowMap(true)}>
-            <FaCarAlt style={styles.cardIcon} />
-            <div style={styles.cardContent}>
-              <span style={styles.cardTitle}>Find Parking</span>
-              <span style={styles.cardText}>Search for available spots nearby.</span>
-            </div>
-          </div>
-
-          <div style={{ ...styles.card, ...styles.greenCard }} onClick={() => setShowBookings(true)}>
-            <FaHistory style={styles.cardIcon} />
-            <div style={styles.cardContent}>
-              <span style={styles.cardTitle}>My Bookings</span>
-              <span style={styles.cardText}>View your recent parking history.</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Activity Section */}
-        <div style={styles.activitySection}>
-          <h2 style={styles.activityTitle}>Recent Activity</h2>
-          {mockActivity.map((activity) => (
-            <div key={activity.id} style={styles.activityItem}>
-              <FaClock style={styles.activityIcon} />
-              <div>
-                <p style={styles.activityText}>{activity.message}</p>
-                <span style={styles.activityTime}>{activity.time}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+          <ParkingSpots />
+        </>}
+        {view === 'bookings' && <>
+          <button onClick={() => setView('dashboard')} style={{ marginBottom: '20px' }}>
+            <Icon icon="mdi:arrow-left" /> Back
+          </button>
+          <MyBookings />
+        </>}
+      </main>
     </div>
   );
 };
