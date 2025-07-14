@@ -6,6 +6,7 @@ import MyBookings from './MyBookings';
 import {
   BarChart,
   Bar,
+  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -33,18 +34,18 @@ const UserDashboard = ({ onLogout, user = { name: "Driver" } }) => {
   const [view, setView] = useState('dashboard');
   const [availabilityData, setAvailabilityData] = useState(initialAvailability);
 
-  // Simulate live updates every 3 seconds
+  // Simulate live updates every 3 seconds - fixed with functional update
   useEffect(() => {
     const interval = setInterval(() => {
-      const updated = availabilityData.map(loc => ({
-        ...loc,
-        available: Math.max(0, Math.min(100, loc.available + (Math.random() * 20 - 10))),
-      }));
-      setAvailabilityData(updated);
+      setAvailabilityData(prevData =>
+        prevData.map(loc => ({
+          ...loc,
+          available: Math.max(0, Math.min(100, loc.available + (Math.random() * 20 - 10))),
+        }))
+      );
     }, 3000);
-
     return () => clearInterval(interval);
-  }, [availabilityData]);
+  }, []);
 
   const styles = {
     layout: {
@@ -123,12 +124,6 @@ const UserDashboard = ({ onLogout, user = { name: "Driver" } }) => {
             data={availabilityData}
             margin={{ top: 20, right: 30, left: 0, bottom: 60 }}
           >
-            <defs>
-              <linearGradient id="availabilityGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#10b981" stopOpacity={0.9} />
-                <stop offset="100%" stopColor="#34d399" stopOpacity={0.5} />
-              </linearGradient>
-            </defs>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
             <XAxis
               dataKey="location"
@@ -142,14 +137,26 @@ const UserDashboard = ({ onLogout, user = { name: "Driver" } }) => {
             <Tooltip formatter={(value) => `${Math.round(value)}% Available`} />
             <Bar
               dataKey="available"
-              fill="url(#availabilityGradient)"
               radius={[10, 10, 0, 0]}
               animationDuration={1000}
-            />
+            >
+              {availabilityData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={entry.available < 30 ? '#ef4444' /* red */ : '#22c55e' /* green */}
+                />
+              ))}
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
     </>
+  );
+
+  const BackButton = ({ onClick }) => (
+    <button onClick={onClick} style={{ marginBottom: '20px' }}>
+      <Icon icon="mdi:arrow-left" /> Back
+    </button>
   );
 
   return (
@@ -173,15 +180,11 @@ const UserDashboard = ({ onLogout, user = { name: "Driver" } }) => {
       <main style={styles.mainContent}>
         {view === 'dashboard' && renderDashboard()}
         {view === 'map' && <>
-          <button onClick={() => setView('dashboard')} style={{ marginBottom: '20px' }}>
-            <Icon icon="mdi:arrow-left" /> Back
-          </button>
+          <BackButton onClick={() => setView('dashboard')} />
           <ParkingSpots />
         </>}
         {view === 'bookings' && <>
-          <button onClick={() => setView('dashboard')} style={{ marginBottom: '20px' }}>
-            <Icon icon="mdi:arrow-left" /> Back
-          </button>
+          <BackButton onClick={() => setView('dashboard')} />
           <MyBookings />
         </>}
       </main>

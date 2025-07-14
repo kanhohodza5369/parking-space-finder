@@ -6,12 +6,42 @@ import L from 'leaflet';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 
+// Fix Leaflet icon URLs for default markers (good practice)
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
   iconUrl: require('leaflet/dist/images/marker-icon.png'),
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
+
+// Create a custom circular colored icon for parking status
+const createCustomIcon = (color) => {
+  const isGreen = color === '#22c55e';
+
+  return L.divIcon({
+    className: '',
+    html: `
+      <div style="
+        background-color: ${color};
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 2px solid white;
+        box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        ${isGreen ? 'animation: pulse 1.8s ease-in-out infinite;' : ''}
+      "></div>
+      <style>
+        @keyframes pulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.5); }
+          100% { transform: scale(1); }
+        }
+      </style>
+    `,
+    iconSize: [24, 24],
+    iconAnchor: [12, 12],
+  });
+};
 
 const initialParkingSpots = [
   { id: 1, name: 'Julius Nyerere Way', position: [-17.8252, 31.0335], available: true },
@@ -32,21 +62,33 @@ const ParkingSpots = ({ isAgent }) => {
     );
   };
 
+  const selectedSpot = parkingSpots.find(spot => spot.id === parseInt(selectedSpotId));
+  const isSelectedSpotAvailable = selectedSpot ? selectedSpot.available : false;
+
   const handleBook = () => {
     if (!selectedSpotId) return;
-    const selectedSpot = parkingSpots.find(spot => spot.id === parseInt(selectedSpotId));
+    if (!isSelectedSpotAvailable) {
+      alert("Selected spot is currently full. Please select an available spot.");
+      return;
+    }
     navigate(`/book-parking/${encodeURIComponent(selectedSpot.name)}`);
   };
 
   return (
     <div style={{ display: 'flex', height: '85vh', backgroundColor: '#f9fafb' }}>
-      {/* Map View (Smaller) */}
-      <div style={{ flex: 2.2 }}>
+      {/* Map View */}
+      <div style={{ flex: 2.2, position: 'relative' }}>
         <MapContainer
           center={[-17.8252, 31.0335]}
           zoom={14}
           scrollWheelZoom
-          style={{ height: '100%', width: '100%', borderRadius: '0 12px 12px 0' }}
+          zoomControl={false}
+          attributionControl={false}
+          style={{
+            height: '100%',
+            width: '100%',
+            borderRadius: '0 12px 12px 0',
+          }}
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -56,6 +98,7 @@ const ParkingSpots = ({ isAgent }) => {
             <Marker
               key={spot.id}
               position={spot.position}
+              icon={createCustomIcon(spot.available ? '#22c55e' /* green */ : '#ef4444' /* red */)}
               eventHandlers={isAgent ? { click: () => toggleAvailability(spot.id) } : {}}
             >
               <Popup>
@@ -68,7 +111,7 @@ const ParkingSpots = ({ isAgent }) => {
         </MapContainer>
       </div>
 
-      {/* Sidebar / Booking Panel (Wider) */}
+      {/* Sidebar / Booking Panel */}
       <div
         style={{
           flex: 1.8,
@@ -109,7 +152,7 @@ const ParkingSpots = ({ isAgent }) => {
 
           <button
             onClick={handleBook}
-            disabled={!selectedSpotId}
+            disabled={!selectedSpotId || !isSelectedSpotAvailable}
             aria-label="Book selected parking spot"
             style={{
               padding: '14px 18px',
@@ -118,7 +161,7 @@ const ParkingSpots = ({ isAgent }) => {
               border: 'none',
               borderRadius: '10px',
               fontWeight: 600,
-              cursor: selectedSpotId ? 'pointer' : 'not-allowed',
+              cursor: selectedSpotId && isSelectedSpotAvailable ? 'pointer' : 'not-allowed',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
