@@ -33,7 +33,7 @@ const MyBookings = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.heading}>📒 My Bookings</h1>
+      <h1 style={styles.heading}> My Bookings</h1>
       {bookings.length === 0 ? (
         <p style={{ textAlign: 'center', marginTop: '30px' }}>No bookings yet.</p>
       ) : (

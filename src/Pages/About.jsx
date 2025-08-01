@@ -1,27 +1,6 @@
 import React from 'react';
-import { Carousel } from 'react-responsive-carousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const About = () => {
-  const images = [
-    {
-      url: 'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=1200',
-      caption: 'Happy driver with car keys',
-    },
-    {
-      url: 'https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1200',
-      caption: 'Smiling woman next to parked car',
-    },
-    {
-      url: 'https://images.pexels.com/photos/3806252/pexels-photo-3806252.jpeg?auto=compress&cs=tinysrgb&w=1200',
-      caption: 'Driver happily getting into parked car',
-    },
-    {
-      url: 'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=1200',
-      caption: 'Satisfied driver ready to go',
-    }
-  ];
-
   return (
     <div
       style={{
@@ -29,9 +8,10 @@ const About = () => {
         minHeight: '100vh',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         padding: '3rem 1rem',
         fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        marginTop: '2rem',
       }}
     >
       <div
@@ -45,28 +25,6 @@ const About = () => {
           animation: 'fadeIn 1s ease forwards',
         }}
       >
-        {/* Carousel Section */}
-        <Carousel
-          autoPlay
-          infiniteLoop
-          interval={6000}
-          showThumbs={false}
-          showStatus={false}
-          showIndicators={true}
-          dynamicHeight={false}
-        >
-          {images.map((img, i) => (
-            <div key={i}>
-              <img
-                src={img.url}
-                alt={img.caption}
-                style={{ height: '500px', objectFit: 'cover', width: '100%' }}
-              />
-              <p className="legend">{img.caption}</p>
-            </div>
-          ))}
-        </Carousel>
-
         {/* Text Section */}
         <div
           style={{
@@ -101,12 +59,6 @@ const About = () => {
           @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
-          }
-
-          @media (max-width: 768px) {
-            .legend {
-              font-size: 0.9rem !important;
-            }
           }
         `}
       </style>

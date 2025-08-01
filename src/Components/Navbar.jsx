@@ -12,8 +12,7 @@ const HomeNavbar = () => {
         <Link to="/" style={styles.link}>Home</Link>
         <Link to="/about" style={styles.link}>About</Link>
         <Link to="/pricing" style={styles.link}>Pricing</Link>
-        <Link to="/book-parking" style={styles.link}>Book Parking</Link>
-        <Link to="/login" style={styles.getStarted}>Get Started</Link>
+        {/* Removed Book Parking and Get Started */}
       </div>
     </nav>
   );
@@ -48,16 +47,7 @@ const styles = {
     fontWeight: '500',
     transition: 'color 0.3s',
   },
-  getStarted: {
-    textDecoration: 'none',
-    backgroundColor: '#2563eb', // blue
-    color: '#ffffff',
-    padding: '8px 16px',
-    borderRadius: '8px',
-    fontWeight: '600',
-    fontSize: '16px',
-    transition: 'background-color 0.3s',
-  },
+  // Removed getStarted style since no longer used
 };
 
 export default HomeNavbar;
